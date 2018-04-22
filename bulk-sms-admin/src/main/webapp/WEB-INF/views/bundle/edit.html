@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/common_css_include :: common('Edit Bundle')">
+</head>
+
+<body>
+	<!-- <ul th:each="con : ${contacts}">
+		<li th:text="${con.info}">
+		<li>
+	</ul> -->
+	<section id="container">
+		<!--header start-->
+		<div th:replace="fragments/header :: header"></div>
+		<!--header end-->
+
+		<!--main content start-->
+		<section id="main-content">
+			<section class="wrapper">
+				<div class="row">
+					<div class="col-lg-12">
+						<section class="panel">
+							<header class="panel-heading">
+                                <a href="../">
+                                    <i class="fa fa-arrow-circle-left"></i>
+                                </a>
+								Update Bundle Info
+                                <span class="label-success" th:text="${msg}"></span>
+							</header>
+						</section>
+					</div>
+                    <div class="col-lg-6">
+                        <section class="panel">
+                            <header class="panel-heading">
+                            </header>
+                            <div class="panel-body">
+                                <form role="form" th:action="@{/bundle/update}" th:object="${bundleEditForm}" method="POST">
+                                    <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error' : ''">
+                                        <label for="txtName">Name</label>
+                                        <input id="txtName" type="text" th:field="*{name}" class="form-control"/>
+                                        <p class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</p>
+                                        <!--<input name="name" type="text" class="form-control" id="txtName" placeholder="Enter bundle name" th:value="${bundle.name}">-->
+                                    </div>
+                                    <div class="form-group" th:classappend="${#fields.hasErrors('price')} ? 'has-error' : ''">
+                                        <label for="txtPrice">Price</label>
+                                        <input id="txtPrice" type="number" class="form-control" th:field="*{price}"/>
+                                        <p class="help-block" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</p>
+                                        <!--<input name="price" type="number" class="form-control" id="txtPrice" placeholder="Enter bundle price" th:value="${bundle.price}">-->
+                                    </div>
+                                    <div class="form-group" th:classappend="${#fields.hasErrors('quantity')} ? 'has-error' : ''">
+                                        <label for="txtQuantity">Quantity</label>
+                                        <input id="txtQuantity" type="number" class="form-control" th:field="*{quantity}"/>
+                                        <p class="help-block" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">Quantity Error</p>
+                                        <!--<input name="quantity" type="number" class="form-control" id="txtQuantity" placeholder="Enter bundle quantity" th:value="${bundle.quantity}">-->
+                                    </div>
+                                    <div class="form-group" th:classappend="${#fields.hasErrors('createdDate')} ? 'has-error' : ''">
+                                        <label for="txtStartDate">Start Date</label>
+                                        <div id="txtStartDate" data-date-viewmode="years" data-date-format="dd-mm-yyyy" data-date="moment().format();" class="input-append date dpYears">
+                                            <input type="text" readonly="" th:field="*{createdDate}" size="16" class="form-control">
+                                          <span class="input-group-btn add-on">
+                                            <button class="btn btn-danger" type="button" style="margin-left: -30px;"><i class="fa fa-calendar"></i></button>
+                                          </span>
+                                        </div>
+                                        <p class="help-block" th:if="${#fields.hasErrors('createdDate')}" th:errors="*{createdDate}">Created Date Error</p>
+                                    </div>
+                                    <div class="form-group" th:classappend="${#fields.hasErrors('renewalDate')} ? 'has-error' : ''">
+                                        <label for="txtRenewalDate">Renewal Date</label>
+                                        <div id="txtRenewalDate" data-date-viewmode="years" data-date-format="dd-mm-yyyy" data-date="moment().format();" class="input-append date dpYears">
+                                            <input type="text" readonly="" th:field="*{renewalDate}" size="16" class="form-control">
+                                          <span class="input-group-btn add-on">
+                                            <button class="btn btn-danger" type="button" style="margin-left: -30px;"><i class="fa fa-calendar"></i></button>
+                                          </span>
+                                        </div>
+                                        <p class="help-block" th:if="${#fields.hasErrors('renewalDate')}" th:errors="*{renewalDate}">Renewal Date Error</p>
+                                    </div>
+                                    <input type="hidden" th:field="*{id}">
+                                    <button type="submit" class="btn btn-info">Update</button>
+                                </form>
+
+                            </div>
+                        </section>
+                    </div>
+				</div>
+			</section>
+		</section>
+
+        <th:block th:replace="fragments/common_js_include :: common" />
+
+	</section>
+
+
+
+</body>
+</html>

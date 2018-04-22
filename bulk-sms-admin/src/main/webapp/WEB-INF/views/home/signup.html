@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="Mosaddek">
+<meta name="keyword"
+	content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+<link rel="shortcut icon"
+	href="http://thevectorlab.net/flatlab/img/favicon.png">
+
+<title>Sign Up</title>
+
+<!-- Bootstrap core CSS -->
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/resources/css/bootstrap-reset.css}" rel="stylesheet">
+<!--external css-->
+<link th:href="@{/resources/assets/font-awesome/css/font-awesome.css}"
+	rel="stylesheet" />
+<!-- Custom styles for this template -->
+<link th:href="@{/resources/css/style.css}" rel="stylesheet">
+<link th:href="@{/resources/css/style-responsive.css}" rel="stylesheet" />
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+<!--[if lt IE 9]>
+    <script th:href="@{/resources/js/html5shiv.js}"></script>
+    <script th:href="@{/resources/js/respond.min.js}"></script>
+    <![endif]-->
+</head>
+
+<body class="login-body">
+
+	<div class="container">
+
+		<form id="password-form" class="form-signin" method="post" th:action="@{/signup}"
+			th:object="${signupForm}">
+			<h2 class="form-signin-heading">Sign Up Now</h2>
+
+			<div class="login-wrap">
+
+				<input type="text" class="form-control" placeholder="Email"
+					autofocus th:field="*{email}" required> <span
+					class="help-block error" th:if="${#fields.hasErrors('email')}"
+					th:errors="*{email}">Incorrect email</span> <input id="new_password" type="password"
+					class="form-control" placeholder="Password" th:field="*{password}"
+					required> <span class="help-block error"
+					th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect
+					Password</span>
+					<input id="confirm_password" type="password"
+					class="form-control" placeholder="Retype password to confirm"
+					required>
+					<span id="error-password-matcher" class="help-block error"></span>
+				<button class="btn btn-lg btn-login btn-block" type="submit">Sign
+					Up</button>
+				<p>
+					<a href="/singin">Sign In</a>
+				</p>
+
+			</div>
+
+
+		</form>
+
+	</div>
+
+
+
+	<!-- js placed at the end of the document so the pages load faster -->
+	<script th:src="@{/resources/js/jquery.js}"></script>
+	<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+
+	<script type="text/javascript">
+		$(document).ready(
+				function() {
+					$('#password-form').submit(
+							function() {
+								var password = $("#new_password").val();
+								var confirmPassword = $("#confirm_password")
+										.val();
+
+								if (password != confirmPassword) {
+									$("#error-password-matcher").html(
+											"Passwords do not match!");
+									return false;
+								}else
+									return true;
+
+							});
+
+				});
+	</script>
+</body>
+</html>

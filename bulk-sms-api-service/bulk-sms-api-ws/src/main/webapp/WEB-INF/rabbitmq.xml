@@ -1,0 +1,34 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.5.xsd">
+
+    <rabbit:connection-factory id="connectionFactory" host="${rabbit.host}" port="${rabbit.port}"/>
+    <bean id="jsonConverter" class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter">
+    </bean>
+    <!-- add retry-template -->
+    <bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
+        <property name="backOffPolicy">
+            <bean class="org.springframework.retry.backoff.ExponentialBackOffPolicy">
+                <property name="initialInterval" value="500"/>
+                <property name="multiplier" value="10.0"/>
+                <property name="maxInterval" value="10000"/>
+            </bean>
+        </property>
+    </bean>
+    <rabbit:template id="rabbitTemplate"
+                     connection-factory="connectionFactory"
+                     retry-template="retryTemplate"
+                     exchange="${message.exchange.mt}" routing-key="${message.exchange.mt.pattern}"
+                     message-converter="jsonConverter"/>
+    <rabbit:admin connection-factory="connectionFactory"/>
+    <!-- MT -->
+    <rabbit:queue durable="true" name="${message.queue.mt}"/>
+    <rabbit:topic-exchange name="${message.exchange.mt}">
+        <rabbit:bindings>
+            <rabbit:binding queue="${message.queue.mt}" pattern="${message.exchange.mt.pattern}"/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+</beans>

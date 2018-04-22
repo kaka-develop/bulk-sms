@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="Mosaddek">
+<meta name="keyword"
+	content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+<link rel="shortcut icon"
+	href="http://thevectorlab.net/flatlab/img/favicon.png">
+
+<title>Profile Edit</title>
+
+<!-- Bootstrap core CSS -->
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/resources/css/bootstrap-reset.css}" rel="stylesheet">
+<!--external css-->
+<link th:href="@{/resources/assets/font-awesome/css/font-awesome.css}"
+	rel="stylesheet" />
+<!--right slidebar-->
+<link th:href="@{/resources/css/slidebars.css}" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link th:href="@{/resources/css/style.css}" rel="stylesheet">
+<link th:href="@{/resources/css/style-responsive.css}" rel="stylesheet" />
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+<!--[if lt IE 9]>
+      <script th:src="@{/resources/js/html5shiv.js}"></script>
+      <script th:src="@{/resources/js/respond.min.js}"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+	<section id="container" class="">
+		<!--header start-->
+		<div th:replace="fragments/header :: header"></div>
+		<!--header end-->
+
+		<!--main content start-->
+		<section id="main-content">
+			<section class="wrapper">
+				<!-- page start-->
+				<div class="row">
+					<div th:replace="account/aside_profile :: asideProfile"></div>
+
+					<aside class="profile-info col-lg-9">
+						<section class="panel panel-primary">
+							<div class="panel-heading">Edit Account Profile</div>
+							<div class="panel-body bio-graph-info">
+								<h1>Profile Info</h1>
+								<form class="form-horizontal"
+									th:action="@{/account/profile/edit}" method="POST"
+									th:object="${profileForm}">
+									<div class="form-group"
+										th:classappend="${#fields.hasErrors('info')}? 'has-error':'has-success'">
+										<label class="col-lg-2 control-label">About Me</label>
+										<div class="col-lg-10">
+											<textarea id="" class="form-control" cols="30" rows="3"
+												th:field="*{info}"></textarea>
+											<p class="help-block" th:if="${#fields.hasErrors('info')}"
+												th:errors="*{info}">Incorrect Information</p>
+										</div>
+									</div>
+									<div class="form-group"
+										th:classappend="${#fields.hasErrors('username')}? 'has-error':'has-success'">
+										<label class="col-lg-2 control-label">User Name</label>
+										<div class="col-lg-6">
+											<input type="text" class="form-control" id="f-name"
+												placeholder="User Name" th:field="*{username}">
+											<p class="help-block"
+												th:if="${#fields.hasErrors('username')}"
+												th:errors="*{username}">Incorrect Username</p>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="col-lg-offset-2 col-lg-10">
+											<button type="submit" class="btn btn-success">Save</button>
+											<a href="/account/profile" class="btn btn-default">Cancel</a>
+										</div>
+									</div>
+								</form>
+							</div>
+						</section>
+						<div class="panel panel-primary">
+							<div class="panel-heading">Avatar</div>
+							<div class="panel-body">
+								<form class="form-horizontal" role="form"
+									enctype="multipart/form-data" th:action="@{/account/avatar}"
+									method="POST">
+									<div class="form-group">
+										<label class="col-lg-2 control-label">Display Avatar</label>
+										<div class="col-lg-6">
+											<span class="photo"><img id="img-avatar"  style="width:38px; height:30px;"
+										alt="avatar" th:src="@{'/resources/img/'+ ${#authentication.principal.account.avatar}}"></span>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="col-lg-2 control-label">Change Avatar</label>
+										<div class="col-lg-6">
+											<input type="file"  id="input-avatar" accept="image/*"
+												name="file">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="col-lg-offset-2 col-lg-10">
+											<button type="submit" class="btn btn-success">Save</button>
+											<a href="/account/profile" class="btn btn-default">Cancel</a>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+			</section>
+			</aside>
+			</div>
+
+			<!-- page end-->
+		</section>
+	</section>
+	<!--main content end-->
+	<div th:replace="fragments/rightbar :: rightbar"></div>
+	</section>
+
+	<!-- js placed at the end of the document so the pages load faster -->
+	<script th:src="@{/resources/js/jquery.js}"></script>
+	<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+	<script class="include" type="text/javascript"
+		th:src="@{/resources/js/jquery.dcjqaccordion.2.7.js}"></script>
+	<script th:src="@{/resources/js/jquery.scrollTo.min.js}"></script>
+	<script th:src="@{/resources/js/jquery.nicescroll.js}"
+		type="text/javascript"></script>
+	<script th:src="@{/resources/assets/jquery-knob/js/jquery.knob.js}"></script>
+	<script th:src="@{/resources/js/respond.min.js}"></script>
+
+	<!--right slidebar-->
+	<script th:src="@{/resources/js/slidebars.min.js}"></script>
+
+	<!--common script for all pages-->
+	<script th:src="@{/resources/js/common-scripts.js}"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+
+					reader.onload = function(e) {
+						$('#img-avatar').attr('src', e.target.result);
+					}
+
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+
+			$("#input-avatar").change(function() {
+				readURL(this);
+			});
+		});
+	</script>
+
+	<!--  Custom main-->
+	<script th:src="@{/resources/js/custom-main.js}"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			setActive("Profile Edit", '#profile-edit-menu');
+		});
+	</script>
+</body>
+</html>

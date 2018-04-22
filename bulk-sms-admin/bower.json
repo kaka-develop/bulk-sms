@@ -1,0 +1,11 @@
+{
+  "name": "bulk-sms-admin",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "dependencies": {
+    "angular": "1.5.8"
+  }
+}

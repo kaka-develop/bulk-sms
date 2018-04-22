@@ -1,0 +1,20 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="shortMessageHandler" class="minhthanh.handler.DefaultShortMessageHandler">
+        <constructor-arg>
+            <bean class="minhthanh.chainables.ScreenShortMessageChainableService">
+                <property name="successor">
+                    <bean class="minhthanh.chainables.RabbitShortMessageChainableService">
+                        <property name="rabbitTemplate" ref="rabbitTemplate"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="rabbitMqService" class="minhthanh.service.OnstartupService" init-method="init">
+        <constructor-arg ref="shortMessageHandler"/>
+        <constructor-arg value="2"/>
+    </bean>
+</beans>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head th:replace="fragments/common_css_include :: common('List Sent SMS')">
+
+</head>
+
+<body>
+	<section id="container">
+		<!--header start-->
+		<div th:replace="fragments/header :: header"></div>
+		<!--header end-->
+
+		<!--main content start-->
+		<section id="main-content">
+			<section class="wrapper">
+				<div class="row">
+					<div class="col-lg-12">
+						<section class="panel">
+							<header class="panel-heading">
+								Bundle List
+                                <ul class="nav pull-right top-menu" style="padding-top: 5px; padding-right: 125px;">
+                                    <li>
+                                        <a href="/bundle/new" type="button" class="btn btn-success">
+                                            <i class="fa fa-plus" aria-hidden="true"></i> New
+                                        </a>
+                                    </li>
+                                </ul>
+							</header>
+							<table class="table table-striped table-advance table-hover">
+								<thead>
+								<tr>
+									<th>Name</th>
+									<th>Price</th>
+									<th>Quantity</th>
+                                    <th>Start Date</th>
+									<th>Renewal Date</th>
+                                    <th>Status</th>
+                                    <th></th>
+								</tr>
+								</thead>
+								<tbody>
+
+								<tr th:each="bundle : ${lstBundles}">
+                                    <td th:text="${bundle.name ?: 'Unknown name'}"></td>
+                                    <td>
+                                        <span th:text="${#numbers.formatDecimal(bundle.price, 0, 'COMMA', 0, 'POINT')}"></span> ₫
+                                    </td>
+                                    <td th:text="${bundle.quantity}"></td>
+                                    <td th:text="${bundle.createdDate} ? ${#dates.format(bundle.createdDate, 'dd-MM-yyyy')} : 'Unknown date'"></td>
+                                    <td th:text="${bundle.renewalDate} ? ${#dates.format(bundle.renewalDate, 'dd-MM-yyyy')} : 'Unknown date'"></td>
+                                    <span th:if="${bundle.renewalDate == null or bundle.createdDate == null}">
+                                        <td>
+                                            <span class="label label-warning label-mini">Unknown</span>
+                                        </td>
+                                    </span>
+                                    <span th:if="${bundle.renewalDate != null and bundle.createdDate != null}">
+                                        <td th:if="${bundle.createdDate lt bundle.renewalDate}">
+                                            <span class="label label-success label-mini">In-use</span>
+                                        </td>
+                                        <td th:if="${bundle.createdDate ge bundle.renewalDate}">
+                                            <span class="label label-danger label-mini">Due</span>
+                                        </td>
+                                    </span>
+
+                                    <td>
+                                        <a th:href="@{/bundle/edit/} + ${bundle.id}" class="btn btn-success btn-xs">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a th:href="@{/bundle/history/} + ${bundle.id}" class="btn btn-primary btn-xs">
+                                            <i class="fa fa-history"></i>
+                                        </a>
+                                        <a href="#" data-th-attr="data-bundle-id=${bundle.id}" class="btn btn-danger btn-xs" onclick="deleteBundle($(this).data('bundle-id'));">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+								</tbody>
+							</table>
+						</section>
+					</div>
+				</div>
+			</section>
+		</section>
+
+	</section>
+
+    <th:block th:replace="fragments/common_js_include :: common" />
+
+
+</body>
+</html>

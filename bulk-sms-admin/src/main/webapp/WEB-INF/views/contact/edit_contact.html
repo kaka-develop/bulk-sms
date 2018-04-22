@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="Mosaddek">
+<meta name="keyword"
+	content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+<link rel="shortcut icon"
+	href="http://thevectorlab.net/flatlab/img/favicon.png">
+
+<title>Edit Contact</title>
+
+<!-- Bootstrap core CSS -->
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/resources/css/bootstrap-reset.css}" rel="stylesheet">
+<!--external css-->
+<link th:href="@{/resources/assets/font-awesome/css/font-awesome.css}"
+	rel="stylesheet" />
+<!--right slidebar-->
+<link th:href="@{/resources/css/slidebars.css}" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link th:href="@{/resources/css/style.css}" rel="stylesheet">
+<link th:href="@{/resources/css/style-responsive.css}" rel="stylesheet" />
+
+<!-- Time picker -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/assets/bootstrap-datepicker/css/datepicker.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/assets/bootstrap-timepicker/compiled/timepicker.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/assets/bootstrap-daterangepicker/daterangepicker-bs3.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/assets/bootstrap-datetimepicker/css/datetimepicker.css}" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/assets/jquery-multi-select/css/multi-select.css}" />
+
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+<!--[if lt IE 9]>
+      <script th:src="@{/resources/js/html5shiv.js}"></script>
+      <script th:src="@{/resources/js/respond.min.js}"></script>
+    <![endif]-->
+</head>
+
+<body ng-app="contactModule">
+	<section id="container" ng-controller="contactController">
+		<!--header start-->
+		<div th:replace="fragments/header :: header"></div>
+		<!--header end-->
+
+		<!--main content start-->
+		<section id="main-content">
+			<section class="wrapper">
+				<div class="row">
+					<div class="col-lg-7">
+						<section class="panel">
+							<header class="panel-heading">Edit Contact</header>
+							<div class="panel-body">
+								<form id="editform" role="form" action="#"
+									class="form-horizontal tasi-form" th:action="@{/contact/edit}"
+									method="POST" th:object="${contactForm}">
+									<input hidden id="con-id" th:field="*{id}"/>
+									<div class="form-group"
+										th:classappend="${#fields.hasErrors('info')}? 'has-error':'has-success'">
+										<label class="col-lg-2 control-label">Information</label>
+										<div class="col-lg-10">
+											<input type="text" placeholder="" id="f-name"
+												class="form-control" th:field="*{info}" required>
+											<p class="help-block" th:if="${#fields.hasErrors('info')}"
+												th:errors="*{info}">Incorrect Information</p>
+										</div>
+									</div>
+									<div class="form-group"
+										th:classappend="${#fields.hasErrors('phoneNumber')}? 'has-error':'has-success'">
+										<label class="col-lg-2 control-label">Phone Number</label>
+										<div class="col-lg-10">
+											<input type="text" placeholder="" id="l-name"
+												class="form-control" th:field="*{phoneNumber}" required>
+											<p class="help-block"
+												th:if="${#fields.hasErrors('phoneNumber')}"
+												th:errors="*{phoneNumber}">Incorrect phone number</p>
+										</div>
+									</div>
+
+									<div class="form-group"
+										th:classappend="${#fields.hasErrors('date')}? 'has-error':'has-success'">
+										<label class="col-lg-2 control-label"> Created Date
+											Time</label>
+										<div class="col-lg-8">
+											<div id="mdatepicker"
+												class="input-group date form_datetime-component">
+												<input id="mdatevalue" type="text" class="form-control"
+													th:field="*{date}" readonly="" size="16" name="date">
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-danger date-set">
+														<i class="fa fa-calendar"></i>
+													</button>
+												</span>
+											</div>
+											<p class="help-block" th:if="${#fields.hasErrors('date')}"
+												th:errors="*{date}">Incorrect date</p>
+										</div>
+
+									</div>
+
+									<div class="form-group">
+										<div class="col-lg-offset-2 col-lg-10">
+											<a href="/contact" class="btn btn-primary">Cancel</a>
+											<button id="btn-submit" class="btn btn-danger" type="submit">Save</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</section>
+					</div>
+
+					<div  id="group-loading" class="col-lg-5" hidden="true">
+						<section class="panel">
+							<header class="panel-heading">Select Group</header>
+							<div class="panel-body">
+								<div class="form-group">
+									<div class="col-lg-10">
+										<select class="form-control" id="group-options">
+											<option value="{{grop.id}}" ng-repeat="grop in groups">{{grop.name}}</option>
+										</select>
+									</div>
+
+									<button class="btn btn-success"
+										ng-click="addContactIntoGroup()">Add</button>
+								</div>
+								<div class="form-group">
+									<ul class="chat-list">
+										<li ng-repeat="grop in selectedGroups"><a href="#"> <i
+												class="fa fa-rocket"></i> <span>{{grop.name}}</span>
+												<button class=" btn-danger pull-right"
+													ng-click="deleteGroupOfContact(grop.id)">Delete</button>
+										</a></li>
+									</ul>
+								</div>
+							</div>
+
+						</section>
+					</div>
+				</div>
+			</section>
+			Ï
+		</section>
+		<!--main content end-->
+
+
+		<!--footer start-->
+		<!-- <div th:replace="fragments/footer :: footer"></div> -->
+		<!--footer end-->
+	</section>
+
+	<!-- js placed at the end of the document so the pages load faster -->
+	<script th:src="@{/resources/js/jquery.js}"></script>
+	<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+	<script class="include" type="text/javascript"
+		th:src="@{/resources/js/jquery.dcjqaccordion.2.7.js}"></script>
+	<script th:src="@{/resources/js/jquery.scrollTo.min.js}"></script>
+	<script th:src="@{/resources/js/jquery.nicescroll.js}"
+		type="text/javascript"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/js/jquery.validate.min.js}"></script>
+	<script th:src="@{/resources/js/respond.min.js}"></script>
+
+	<!--right slidebar-->
+	<script th:src="@{/resources/js/slidebars.min.js}"></script>
+
+	<!-- Time picker -->
+	<script type="text/javascript"
+		th:src="@{/resources/assets/fuelux/js/spinner.min.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/bootstrap-daterangepicker/moment.min.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/bootstrap-daterangepicker/daterangepicker.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/jquery-multi-select/js/jquery.multi-select.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/resources/assets/jquery-multi-select/js/jquery.quicksearch.js}"></script>
+
+	<script th:src="@{/resources/js/advanced-form-components.js}"></script>
+
+	<!--common script for all pages-->
+	<script th:src="@{/resources/js/common-scripts.js}"></script>
+
+	<!--script for this page-->
+	<script th:src="@{/resources/js/form-validation-script.js}"></script>
+
+
+	<!--  Custom main-->
+	<script th:src="@{/resources/js/custom-main.js}"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			setActive("Edit Contact", '#contact-menu');
+		});
+	</script>
+	
+	<!-- Angular  -->
+	<script th:src="@{/resources/bower_components/angular/angular.js}"></script>
+
+	<!-- Contact with angular  -->
+	<script th:src="@{/resources/js/app/contact/contact.js}"></script>
+
+
+</body>
+</html>
